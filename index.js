@@ -4,14 +4,18 @@ import PropTypes from 'prop-types'
 export default class ScrollableList extends Component {
   static propTypes = {
     listItems: PropTypes.array.isRequired,
-    heightOfItem: PropTypes.number,
+    heightOfItem: PropTypes.number.isRequired,
+    renderListItem: PropTypes.func.isRequired,
     maxItemsToRender: PropTypes.number,
+    className: PropTypes.string,
     style: PropTypes.object
   }
   static defaultProps = {
     listItems: [],
     heightOfItem: 30,
-    maxItemsToRender: 50
+    maxItemsToRender: 50,
+    className: '',
+    renderListItem: () => <div/>
   }
   constructor(props) {
     super(props)
@@ -52,20 +56,15 @@ export default class ScrollableList extends Component {
       : this.state.scrollPosition + this.props.maxItemsToRender
 
     return (
-      <div className="react-scrollable-list" ref={this.setListRef} style={this.props.style}>
+      <div className={this.props.className ? this.props.className : "react-scrollable-list"}
+           ref={this.setListRef} style={this.props.style}>
         <div
           key="list-spacer-top"
           style={{
             height: startPosition * this.props.heightOfItem
           }}
         />
-        {this.props.listItems.slice(startPosition, endPosition).map(item => (
-          <div
-            className="react-scrollable-list-item"
-            key={'list-item-' + item.id}>
-            {item.content}
-          </div>
-        ))}
+        {this.props.listItems.slice(startPosition, endPosition).map(this.props.renderListItem)}
         <div
           key="list-spacer-bottom"
           style={{
