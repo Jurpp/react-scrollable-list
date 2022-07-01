@@ -70,22 +70,15 @@ var ScrollableList = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'react-scrollable-list', ref: this.setListRef, style: this.props.style },
+        { className: this.props.className ? this.props.className : "react-scrollable-list",
+          ref: this.setListRef, style: this.props.style },
         _react2.default.createElement('div', {
           key: 'list-spacer-top',
           style: {
             height: startPosition * this.props.heightOfItem
           }
         }),
-        this.props.listItems.slice(startPosition, endPosition).map(function (item) {
-          return _react2.default.createElement(
-            'div',
-            {
-              className: 'react-scrollable-list-item',
-              key: 'list-item-' + item.id },
-            item.content
-          );
-        }),
+        this.props.listItems.slice(startPosition, endPosition).map(this.props.renderListItem),
         _react2.default.createElement('div', {
           key: 'list-spacer-bottom',
           style: {
@@ -101,13 +94,19 @@ var ScrollableList = function (_Component) {
 
 ScrollableList.propTypes = {
   listItems: _propTypes2.default.array.isRequired,
-  heightOfItem: _propTypes2.default.number,
+  heightOfItem: _propTypes2.default.number.isRequired,
+  renderListItem: _propTypes2.default.func.isRequired,
   maxItemsToRender: _propTypes2.default.number,
+  className: _propTypes2.default.string,
   style: _propTypes2.default.object
 };
 ScrollableList.defaultProps = {
   listItems: [],
   heightOfItem: 30,
-  maxItemsToRender: 50
+  maxItemsToRender: 50,
+  className: '',
+  renderListItem: function renderListItem() {
+    return _react2.default.createElement('div', null);
+  }
 };
 exports.default = ScrollableList;
